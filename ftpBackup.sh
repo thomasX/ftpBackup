@@ -22,7 +22,7 @@ printUsage(){
     echo "# usage: "$0" [backupname] [ftpHost] [localBackupDirecory] [ftpBackupDirectory1] [ftpBakupDirectory2] ... "
     echo "#   https://github.com/thomasX/ftpBackup "
     echo "######################################################################"
-
+}
 getFolder(){
     regBase="$subfolder"
     registerSubfolder
