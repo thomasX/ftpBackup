@@ -18,7 +18,7 @@ maxBackupfiles=3
 usage: 
 Example:
 
-./ftpBackup.sh myBackupName <ftpIP> /user/local/Backups /Documents /pictures /otherfiles
+      ./ftpBackup.sh myBackupName <ftpIP> /user/local/Backups /Documents /pictures /otherfiles
   
 does create the backupfile myBackupName_20170822120000_xxxxxx.tar.gz in the folder /usr/local/Backups
         the Backupfile contains the Directory /Documents , /pictures, /otherfile with all their subdirectories.
