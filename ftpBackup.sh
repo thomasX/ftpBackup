@@ -20,7 +20,7 @@ printUsage(){
     echo "# $0"
     echo "# created by Thomas Margreiter 2017-08-22                            "
     echo "# usage: "$0" [backupname] [ftpHost] [localBackupDirecory] [ftpBackupDirectory1] [ftpBakupDirectory2] ... "
-    echo "#   https://github.com/thomasX/ftpBackup/blob/master/ftpBackup.sh   "
+    echo "#   https://github.com/thomasX/ftpBackup "
     echo "######################################################################"
 
 getFolder(){
