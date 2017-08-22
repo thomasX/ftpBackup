@@ -9,6 +9,7 @@ ftppasswd=""
        
        
 maxBackupfiles=3
+
        maxBackupfiles defines the maximum Backups with the same Backupname 
        if there are more Backups with the same Backupname on the System, the oldest Backup will be deleted !
 
