@@ -1,11 +1,11 @@
 #!/bin/sh
 
-ftpuser=""
-ftppasswd=""
+ftpuser="admin"
+ftppasswd="admin"
 cfgFailure=""
 backupName=$1
-ftpHost=$2
-localBackupDir=$3
+ftpHost=$3
+localBackupDir=$2
 backupdir=$4
 maxBackupFiles=3
 
@@ -16,13 +16,19 @@ folderParams=$(mktemp)
 
 
 printUsage(){
-    echo "######################################################################"
+    echo "##########################################################################################################"
     echo "# $0"
     echo "# created by Thomas Margreiter 2017-08-22                            "
-    echo "# usage: "$0" [backupname] [ftpHost] [localBackupDirecory] [ftpBackupDirectory1] [ftpBakupDirectory2] ... "
+    echo "# "
     echo "#   https://github.com/thomasX/ftpBackup "
-    echo "######################################################################"
+    echo "# "
+    echo "# "
+    echo "# usage: "$0" [backupname] [localBackupDirecory] [ftpHost] [ftpBackupDirectory1] [ftpBakupDirectory2] ... "
+    echo "# "
+    echo "# "
+    echo "##########################################################################################################"
 }
+
 getFolder(){
     regBase="$subfolder"
     registerSubfolder
@@ -39,7 +45,7 @@ getFolder(){
     passive yes
     cd "$subfolder"
     mget * .
-    quit    
+    quit
 END_SCRIPT
     echo "ftpdir: subfolder:$subfolder"
     echo "Backupstatus $subfolder finished ###############" >> "$curBackupDir"/backupStatus
@@ -58,7 +64,7 @@ registerSubfolder(){
     prompt no
     passive yes
     ls "$regBase"
-    quit    
+    quit
 END_SCRIPT
     cat "$curSubfolderFile" | grep DIR  > "$curSubfolderfile"
     while read LINE ; do
@@ -67,27 +73,41 @@ END_SCRIPT
          echo "$regBase"/"$subName" >> "$folderParams"
          echo "folgender subfolder wurde gefunden: $regBase"/"$subName"
     done <$curSubfolderfile
-    rm -f $curSubfolderFile 
-    rm -f $curSubfolderfile 
+    rm -f $curSubfolderFile
+    rm -f $curSubfolderfile
 }
 ### Main script starts here ##
 
-if [ $ftpuser == "" ]; then 
-    printUsage
-    echo ""
-    echo " please configure the ftpuser in $0"
-    cfgFailure="X";
-fi
-
-if [ $ftppasswd == "" ]; then 
-    printUsage
-    echo ""
-    echo " please configure the ftppasswd in $0"
-    cfgFailure="X";
-fi
 
 if [ $# -lt 4 ]; then
     printUsage
+    cfgFailure="X"
+    echo ""
+fi
+
+if [[ $ftpuser == "" ]]; then
+    if [[ cfgFailure == "" ]]; then
+       printUsage
+    fi
+    echo ""
+    echo " please configure the ftpuser in $0"
+    cfgFailure="X"
+fi
+
+if [[ $ftppasswd == "" ]]; then
+    if [[ cfgFailure == "" ]]; then
+       printUsage
+    fi
+    echo ""
+    echo " please configure the ftppasswd in $0"
+    cfgFailure="X"
+fi
+
+
+
+if [[ $cfgFailure == "X" ]];then
+   echo ""
+   echo ""
 else
    echo ""
    echo "Backup $backupName in progress"
@@ -97,12 +117,12 @@ else
    tmpfolder=$(date +%Y%m%d%H%M%S)
    tmpBasedir=$(mktemp -d -p "$basedir" -t "$backupName"_"$tmpfolder"_XXXXXXXXXX)
    curBackupDir="$tmpBasedir"
-   while [ "$#" -gt 3 ]; do 
+   while [ "$#" -gt 3 ]; do
     subfolder="$4"
     echo "subfolder: $subfolder"
     echo "$subfolder">>"$folderParams"
     shift
-   done 
+   done
 
    while read LINE ; do
      subfolder="$LINE"
@@ -110,18 +130,21 @@ else
      getFolder
    done <$folderParams
 
-fi 
-#grep -B3 unavailable "$curBackupDir"/backupStatus
-echo ""
-cd "$curBackupDir"
-tar -czf "$curBackupDir".tar.gz *
-if [[ $curBackupDir == "$localBackupDir"* ]];then
-    rm -rf $curBackupDir
+   #grep -B3 unavailable "$curBackupDir"/backupStatus
+   echo ""
+   cd "$curBackupDir"
+   tar -czf "$curBackupDir".tar.gz *
+   if [[ $curBackupDir == "$localBackupDir"* ]];then
+       rm -rf $curBackupDir
+   fi
+   deletableBackups=$(($maxBackupFiles+1))
+   somethingDoDelete=$(ls "$basedir"/"$backupName"*.tar.gz -t | tail -n +"$deletableBackups" | xargs echo --)
+   if [[ $somethingDoDelete == "--" ]]; then
+        echo ""
+   else
+      ls "$basedir"/"$backupName"*.tar.gz -t | tail -n +"$deletableBackups" | xargs rm --
+   fi
+   echo ""
+   echo "Backup $backupName finished"
+   rm -f "$folderParams"
 fi
-
-ls "$basedir"/"$backupName"*.tar.gz -t | tail -n +"$maxBackupFiles"+1 | xargs rm --    
-echo ""
-echo "Backup $backupName finished"
-rm -f "$folderParams"
-
-
