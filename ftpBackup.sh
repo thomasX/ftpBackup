@@ -1,12 +1,13 @@
 #!/bin/sh
 
-ftpuser="";
-ftppasswd="";
-cfgFailure="";
+ftpuser=""
+ftppasswd=""
+cfgFailure=""
 backupName=$1
 ftpHost=$2
 localBackupDir=$3
 backupdir=$4
+maxBackupFiles=3
 
 curBackupDir=""
 subfolder=""
@@ -117,7 +118,8 @@ tar -czf "$curBackupDir".tar.gz *
 if [[ $curBackupDir == "$localBackupDir"* ]];then
     rm -rf $curBackupDir
 fi
-ls "$basedir"/"$backupName"*.tar.gz -t | tail -n +4 | xargs rm --    
+
+ls "$basedir"/"$backupName"*.tar.gz -t | tail -n +"$maxBackupFiles"+1 | xargs rm --    
 echo ""
 echo "Backup $backupName finished"
 rm -f "$folderParams"
