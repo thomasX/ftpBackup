@@ -20,11 +20,11 @@ printUsage(){
     echo "# $0"
     echo "# created by Thomas Margreiter 2017-08-22                            "
     echo "# "
-    echo "#   https://github.com/thomasX/ftpBackup "
     echo "# "
     echo "# "
     echo "# usage: "$0" [backupname] [localBackupDirecory] [ftpHost] [ftpBackupDirectory1] [ftpBakupDirectory2] ... "
     echo "# "
+    echo "#     more informations on   https://github.com/thomasX/ftpBackup "
     echo "# "
     echo "##########################################################################################################"
 }
