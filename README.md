@@ -1,5 +1,5 @@
 # ftpBackup
-transfer folders with multiple subfolders over ftp
+linux sh script to transfer folders with multiple subfolders over ftp
 
 to configure this script change the following lines in the script: 
 
