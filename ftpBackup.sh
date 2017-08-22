@@ -96,8 +96,8 @@ else
    tmpfolder=$(date +%Y%m%d%H%M%S)
    tmpBasedir=$(mktemp -d -p "$basedir" -t "$backupName"_"$tmpfolder"_XXXXXXXXXX)
    curBackupDir="$tmpBasedir"
-   while [ "$#" -gt 2 ]; do 
-    subfolder="$3"
+   while [ "$#" -gt 3 ]; do 
+    subfolder="$4"
     echo "subfolder: $subfolder"
     echo "$subfolder">>"$folderParams"
     shift
